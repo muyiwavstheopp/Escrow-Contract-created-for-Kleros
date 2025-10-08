@@ -1,11 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
 
-/**
- * @title EscrowWithKleros
- * @notice Escrow contract integrated with a Kleros-like arbitrator.
- * Funds are held in the contract and can only be sent to buyer or seller.
- */
 
 interface IArbitrator {
     function createDispute(uint256 choices, bytes calldata extraData) external payable returns (uint256 disputeID);
@@ -28,12 +23,12 @@ contract EscrowWithKleros is IArbitrable {
     Status public status;
     bool public disputed;
 
-    // Events
+  
     event PaymentDeposited(address indexed buyer, uint256 amount);
     event DisputeRaised(address indexed raiser, uint256 disputeID);
     event RulingExecuted(uint256 ruling, address recipient, uint256 amount);
 
-    // Only the buyer can call
+  
     modifier onlyBuyer() {
         require(msg.sender == buyer, "Only buyer");
         _;
@@ -52,13 +47,13 @@ contract EscrowWithKleros is IArbitrable {
          emit PaymentDeposited(_buyer, msg.value);
     }
 
-    /// @notice Either buyer or seller can raise a dispute by paying arbitration fee
+    
     function raiseDispute(bytes calldata extraData) external payable {
         require(msg.sender == buyer || msg.sender == seller, "Only buyer or seller");
         require(status == Status.AWAITING_DELIVERY, "Cannot dispute now");
         require(!disputed, "Already disputed");
 
-        // Create dispute on arbitrator; arbitration fee passed as msg.value
+       
         disputeID = arbitrator.createDispute{value: msg.value}(2, extraData);
         disputed = true;
         status = Status.DISPUTED;
@@ -74,7 +69,7 @@ contract EscrowWithKleros is IArbitrable {
 }
 
 
-    /// @notice Called by arbitrator to resolve dispute
+    
     function rule(uint256 _disputeID, uint256 _ruling) external override {
         require(msg.sender == address(arbitrator), "Only arbitrator");
         require(disputed, "No dispute");
@@ -96,6 +91,5 @@ contract EscrowWithKleros is IArbitrable {
         emit RulingExecuted(_ruling, recipient, amount);
     }
 
-    /// @notice Receive fallback (for arbitrator refunds or incidental transfers)
-    receive() external payable {}
+       receive() external payable {}
 }
