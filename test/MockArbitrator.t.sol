@@ -14,7 +14,7 @@ contract MockArbitrator is IArbitrator {
         return lastDisputeID;
     }
 
-    // Helper to simulate arbitrator calling back the escrow contract
+  
     function giveRuling(EscrowWithKleros escrow, uint256 disputeId, uint256 ruling) external {
         escrow.rule(disputeId, ruling);
     }
@@ -60,7 +60,7 @@ contract EscrowWithKlerosTest is Test {
 
         uint256 beforeBalance = buyer.balance;
 
-        // Simulate arbitrator calling back via mock
+    
         vm.prank(address(mockArbitrator));
         mockArbitrator.giveRuling(escrow, escrow.disputeID(), uint256(EscrowWithKleros.RulingOptions.REFUND_BUYER));
 
@@ -75,7 +75,7 @@ contract EscrowWithKlerosTest is Test {
 
         uint256 before = seller.balance;
 
-        // Simulate arbitrator calling back via mock
+       
         vm.prank(address(mockArbitrator));
         mockArbitrator.giveRuling(escrow, escrow.disputeID(), uint256(EscrowWithKleros.RulingOptions.PAY_SELLER));
 
