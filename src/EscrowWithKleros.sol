@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
 
-
 interface IArbitrator {
     function createDispute(uint256 choices, bytes calldata extraData) external payable returns (uint256 disputeID);
 }
