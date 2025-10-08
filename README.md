@@ -1,0 +1,1 @@
+A test smart contract for arbitration purposes which initiates dispute resolution with Kleros, a decentralised online arbitration court, to settle disputes which arise between litigants
